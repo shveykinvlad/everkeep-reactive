@@ -1,6 +1,9 @@
 package com.everkeep.controller
 
 import com.everkeep.AbstractIntegrationTest
+import com.everkeep.controller.NoteController.Companion.ID
+import com.everkeep.controller.NoteController.Companion.NOTES
+import com.everkeep.controller.NoteController.Companion.SEARCH
 import com.everkeep.controller.dto.NoteDto
 import com.everkeep.enums.NotePriority
 import com.everkeep.model.Note
@@ -47,7 +50,7 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
         val expected = noteRepository.save(createNote())
 
         val response = webClient.get()
-            .uri(getPath() + "/{id}", expected.id)
+            .uri(getPath() + ID, expected.id)
             .exchange()
 
         response
@@ -66,7 +69,7 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
 
         val response = webClient.get()
             .uri { uriBuilder ->
-                uriBuilder.path(getControllerPath() + "/search")
+                uriBuilder.path(getControllerPath() + SEARCH)
                     .queryParam("title", expected.title)
                     .build()
             }
@@ -109,7 +112,7 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
             .toNoteDto()
 
         val response = webClient.put()
-            .uri(getPath() + "/{id}", expected.id)
+            .uri(getPath() + ID, expected.id)
             .body(expected.toMono(), NoteDto::class.java)
             .exchange()
 
@@ -128,7 +131,7 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
         val expected = noteRepository.save(createNote())
 
         val response = webClient.delete()
-            .uri(getPath() + "/{id}", expected.id)
+            .uri(getPath() + ID, expected.id)
             .exchange()
 
         response
@@ -138,7 +141,7 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
         assertNull(noteRepository.findById(expected.id!!))
     }
 
-    override fun getControllerPath() = "/api/notes"
+    override fun getControllerPath() = NOTES
 
     private fun createNote() =
         Note(title = "title", text = "text", priority = NotePriority.NONE)

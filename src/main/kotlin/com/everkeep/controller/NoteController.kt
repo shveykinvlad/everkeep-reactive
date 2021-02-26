@@ -1,5 +1,6 @@
 package com.everkeep.controller
 
+import com.everkeep.controller.NoteController.Companion.NOTES
 import com.everkeep.controller.dto.NoteDto
 import com.everkeep.service.NoteService
 import org.springframework.http.HttpStatus
@@ -16,18 +17,18 @@ import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/api/notes")
+@RequestMapping(NOTES)
 class NoteController(private val noteService: NoteService) {
 
     @GetMapping
     suspend fun getAll() =
         noteService.getAll()
 
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     suspend fun getById(@PathVariable("id") id: String) =
         noteService.getById(id)
 
-    @GetMapping("/search")
+    @GetMapping(SEARCH)
     suspend fun getByTitle(@RequestParam title: String) =
         noteService.getByTitle(title)
 
@@ -36,12 +37,18 @@ class NoteController(private val noteService: NoteService) {
     suspend fun save(@RequestBody @Valid noteDto: NoteDto) =
         noteService.save(noteDto)
 
-    @PutMapping("/{id}")
+    @PutMapping(ID)
     suspend fun update(@RequestBody @Valid noteDto: NoteDto) =
         noteService.update(noteDto)
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     suspend fun delete(@PathVariable("id") id: String) =
         noteService.delete(id)
+
+    companion object {
+        const val NOTES = "/notes"
+        const val ID = "/{id}"
+        const val SEARCH = "/search"
+    }
 }
