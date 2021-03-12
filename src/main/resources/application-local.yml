@@ -1,6 +1,7 @@
 spring:
   data:
     mongodb:
-      url: mongodb://localhost:27017/everkeep
-      repositories:
-        enabled: true
+      url: mongodb://localhost:27017
+
+integration:
+  uiUrl: http://localhost:4200

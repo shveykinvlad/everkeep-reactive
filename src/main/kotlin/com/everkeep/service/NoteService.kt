@@ -4,7 +4,6 @@ import com.everkeep.controller.dto.NoteDto
 import com.everkeep.exception.NotFoundException
 import com.everkeep.model.Note
 import com.everkeep.repository.NoteRepository
-import com.everkeep.service.mapper.NoteMapper.toNoteDto
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
 
@@ -25,27 +24,35 @@ class NoteService(private val noteRepository: NoteRepository) {
             .map { it.toNoteDto() }
 
     suspend fun save(noteDto: NoteDto): NoteDto {
-        val note = Note(
-            title = noteDto.title,
-            text = noteDto.text,
-            priority = noteDto.priority
-        )
+        val note = noteDto.toNote()
         return noteRepository.save(note)
             .toNoteDto()
     }
 
-    suspend fun update(noteDto: NoteDto): NoteDto {
-        val note = Note(
-            id = noteDto.id,
-            title = noteDto.title,
-            text = noteDto.text,
-            priority = noteDto.priority
-        )
+    suspend fun update(id: String, noteDto: NoteDto): NoteDto {
+        if (id != noteDto.id) {
+            throw IllegalArgumentException("Path variable 'id' doesn't match body field 'id'")
+        }
+        val note = noteDto.toNote()
         return noteRepository.save(note)
             .toNoteDto()
     }
 
     suspend fun delete(id: String) =
         noteRepository.deleteById(id)
+
+    private fun Note.toNoteDto() = NoteDto(
+        id = this.id,
+        title = this.title,
+        text = this.text,
+        priority = this.priority
+    )
+
+    private fun NoteDto.toNote() = Note(
+        id = this.id,
+        title = this.title,
+        text = this.text,
+        priority = this.priority
+    )
 }
 

@@ -29,6 +29,7 @@ dependencies {
     implementation("org.passay:passay:1.6.0")
 
     // security
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
@@ -47,6 +48,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
     testImplementation("org.testcontainers:mongodb:1.15.2")
+    testImplementation("com.icegreen:greenmail-spring:1.6.2")
 }
 
 detekt {

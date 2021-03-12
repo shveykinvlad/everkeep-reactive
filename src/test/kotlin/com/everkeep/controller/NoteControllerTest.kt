@@ -8,7 +8,6 @@ import com.everkeep.controller.dto.NoteDto
 import com.everkeep.enums.NotePriority
 import com.everkeep.model.Note
 import com.everkeep.repository.NoteRepository
-import com.everkeep.service.mapper.NoteMapper.toNoteDto
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -17,13 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import reactor.kotlin.core.publisher.toMono
 
-internal class NoteControllerTest : AbstractIntegrationTest() {
+class NoteControllerTest : AbstractIntegrationTest() {
 
     @Autowired
     private lateinit var noteRepository: NoteRepository
 
     @BeforeEach
-    internal fun setUp() = runBlocking {
+    fun setUp() = runBlocking {
         noteRepository.deleteAll()
     }
 
@@ -108,8 +107,12 @@ internal class NoteControllerTest : AbstractIntegrationTest() {
     @Test
     fun update() = runBlocking<Unit> {
         val note = noteRepository.save(createNote())
-        val expected = note.copy(title = "updated title")
-            .toNoteDto()
+        val expected = NoteDto(
+            id = note.id,
+            title = "updated title",
+            text = note.text,
+            priority = note.priority
+        )
 
         val response = webClient.put()
             .uri(getPath() + ID, expected.id)

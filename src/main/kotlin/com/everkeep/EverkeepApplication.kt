@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class EverkeepKtApplication
+class EverkeepApplication
 
 fun main(args: Array<String>) {
-    runApplication<EverkeepKtApplication>(*args)
+    runApplication<EverkeepApplication>(*args)
 }

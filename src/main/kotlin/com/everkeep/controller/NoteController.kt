@@ -38,8 +38,8 @@ class NoteController(private val noteService: NoteService) {
         noteService.save(noteDto)
 
     @PutMapping(ID)
-    suspend fun update(@RequestBody @Valid noteDto: NoteDto) =
-        noteService.update(noteDto)
+    suspend fun update(@PathVariable("id") id: String, @RequestBody @Valid noteDto: NoteDto) =
+        noteService.update(id, noteDto)
 
     @DeleteMapping(ID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -47,7 +47,7 @@ class NoteController(private val noteService: NoteService) {
         noteService.delete(id)
 
     companion object {
-        const val NOTES = "/notes"
+        const val NOTES = "/api/notes"
         const val ID = "/{id}"
         const val SEARCH = "/search"
     }
