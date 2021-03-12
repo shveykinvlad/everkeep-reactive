@@ -1,5 +1,6 @@
 package com.everkeep.service
 
+import com.everkeep.exception.NotFoundException
 import com.everkeep.exception.UserAlreadyExistsException
 import com.everkeep.model.User
 import com.everkeep.model.VerificationToken
@@ -23,6 +24,17 @@ class UserService(
 
         mailService.sendUserConfirmationMail(user.email, token.value)
     }
+
+    suspend fun confirm(tokenValue: String) {
+        val verificationToken = verificationService.validateAndUtilize(tokenValue, VerificationToken.Action.CONFIRM_ACCOUNT)
+        val user = get(verificationToken.userEmail)
+        user.enabled = true
+
+        userRepository.save(user)
+    }
+
+    private suspend fun get(email: String) =
+        userRepository.findById(email) ?: throw NotFoundException("User with email = $email not found")
 
     private suspend fun isExisted(email: String) =
         userRepository.findById(email) != null

@@ -9,7 +9,7 @@ data class VerificationToken(
     val userEmail: String,
     val expiryTime: OffsetDateTime,
     val action: Action,
-    val active: Boolean = true
+    var active: Boolean = true
 ) {
     enum class Action {
         RESET_PASSWORD,

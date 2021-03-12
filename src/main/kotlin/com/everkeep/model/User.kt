@@ -9,7 +9,7 @@ data class User(
     val email: String,
     val password: String,
     val roles: Set<Role>,
-    val isEnabled: Boolean = false
+    var enabled: Boolean = false
 ) {
     enum class Role {
         ROLE_USER,
